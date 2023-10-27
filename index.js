@@ -1,22 +1,34 @@
-import express from "express"
+import express from "express";
+import { router } from "./router.js";
+import PostRouter from "./PostRouter.js";
+import { database } from "./router.js";
+const app = express();
+
+app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log("middleware tổng của app");
+  next();
+});
 
 
-const app = express()
-
-//  request yeu cau tu phia client 
-//  response phan hoi tu phia server
-app.get("/api/get",(request,response) => {
-    // response.send("phan hoi send : chi dc phep gui string")
-    //response.send  gui 1 string
-
-    //  khi muon gui du lieu la kieu tham chieu (object,array,function)
-    response.json({data : {name : "nghia"}})
-})
 
 
+app.use("/api/user", router);
+app.use(
+  "/api/post",
+  (req, res, next) => {
+    let iduser = req.query.id
+    if(database.find(item => item.id === +iduser)){
+      next();
+    }else{
+      res.json({error : "user notfound!"})
+    }
 
-app.listen(5000,() => {
-    console.log("server is running on PORT : "+ 5000);
-})
+  },
+  PostRouter
+);
 
-//  lol
+app.listen(5000, () => {
+  console.log("server is running on PORT : " + 5000);
+});
