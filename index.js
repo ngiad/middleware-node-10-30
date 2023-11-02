@@ -1,7 +1,7 @@
 import express from "express";
-import { router } from "./router.js";
-import PostRouter from "./PostRouter.js";
-import { database } from "./router.js";
+import { router } from "./routers/router.js";
+import PostRouter from "./routers/PostRouter.js";
+import { database } from "./controllers/userController.js";
 const app = express();
 
 app.use(express.json());
@@ -22,7 +22,7 @@ app.use(
     if(database.find(item => item.id === +iduser)){
       next();
     }else{
-      res.json({error : "user notfound!"})
+      res.json({error : "user notfound!`"})
     }
 
   },
@@ -32,3 +32,9 @@ app.use(
 app.listen(5000, () => {
   console.log("server is running on PORT : " + 5000);
 });
+
+
+let name = {
+  age : 15
+}
+
